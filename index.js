@@ -3,7 +3,7 @@ const express = require("express");
 const cors = require("cors");
 const app = express();
 const port = process.env.PORT || 5000;
-const { MongoClient, ServerApiVersion } = require("mongodb");
+const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 
 // middleware
 app.use(cors());
@@ -56,14 +56,21 @@ async function run() {
     //
     // ............car related all data and functionalities...........
     app.post("/allCars", async (req, res) => {
-      const user = req.body;
-      const result = await carCollection.insertOne(user);
+      const cars = req.body;
+      const result = await carCollection.insertOne(cars);
       res.send(result);
     });
     //
     app.get("/allCars", async (req, res) => {
       const cursor = carCollection.find();
       const result = await cursor.toArray();
+      res.send(result);
+    });
+    //
+    app.get("/allCars/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const result = await carCollection.findOne(query);
       res.send(result);
     });
     //
