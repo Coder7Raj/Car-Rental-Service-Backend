@@ -74,6 +74,40 @@ async function run() {
       res.send(result);
     });
     //
+    app.get("/myCars", async (req, res) => {
+      const email = req.query.email;
+      const result = await carCollection.find({ email }).toArray();
+      res.send(result);
+    });
+    //
+    app.delete("/allCars/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const result = await carCollection.deleteOne(query);
+      res.send(result);
+    });
+    //
+    app.put("/allCars/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+
+      const updatedReview = req.body;
+      const car = {
+        $set: {
+          name: updatedReview.name,
+          image: updatedReview.image,
+          model: updatedReview.model,
+          pricePerDay: updatedReview.pricePerDay,
+          availability: updatedReview.availability,
+          features: updatedReview.features,
+          description: updatedReview.description,
+        },
+      };
+
+      const result = await carCollection.updateOne(query, car);
+      res.send(result);
+    });
+    //
     await client.db("admin").command({ ping: 1 });
     console.log(
       "Pinged your deployment. You successfully connected to MongoDB!"
