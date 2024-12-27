@@ -26,6 +26,9 @@ async function run() {
     await client.connect();
     const userCollection = client.db("CarUser").collection("users");
     const carCollection = client.db("AvailableCars").collection("AllCars");
+    const bookingCollection = client
+      .db("BookingCars")
+      .collection("BookingList");
     //
     // .....all users data functionalities.....
     app.post("/users", async (req, res) => {
@@ -105,6 +108,61 @@ async function run() {
       };
 
       const result = await carCollection.updateOne(query, car);
+      res.send(result);
+    });
+    //
+    //
+    // .........Car Booking Section........
+    app.post("/bookList/:id", async (req, res) => {
+      const email = req.body.userEmail;
+
+      const { id } = req.body;
+      if (id && email) {
+        const isExist = await bookingCollection.findOne({
+          id,
+          userEmail: email,
+        });
+        if (isExist) {
+          return res.json({ message: "review already exist." });
+        }
+        const bookList = req.body;
+        const result = await bookingCollection.insertOne(bookList);
+        res.send(result);
+      } else {
+        return res.status(402).json("id or email not found.");
+      }
+    });
+    //
+    app.get("/bookList", async (req, res) => {
+      const cursor = bookingCollection.find();
+      const result = await cursor.toArray();
+      res.send(result);
+    });
+    //
+    app.get("/bookLists", async (req, res) => {
+      const email = req.query.email;
+      console.log(email);
+      if (!email) {
+        return res.status(400).json({ message: "Email is required" });
+      }
+
+      try {
+        const cursor = bookingCollection.find({ userEmail: email });
+        console.log(cursor);
+        const result = await cursor.toArray();
+
+        res.send(result);
+      } catch (err) {
+        console.error("Error fetching bookList:", err);
+        res.status(500).json({ message: "Internal server error" });
+      }
+    });
+    //
+    app.delete("/bookList/:id", async (req, res) => {
+      const id = req.params.id;
+      console.log(id);
+      const query = { _id: new ObjectId(id) };
+      const result = await bookingCollection.deleteOne(query);
       res.send(result);
     });
     //
