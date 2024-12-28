@@ -23,7 +23,6 @@ const client = new MongoClient(uri, {
 
 async function run() {
   try {
-    await client.connect();
     const userCollection = client.db("CarUser").collection("users");
     const carCollection = client.db("AvailableCars").collection("AllCars");
     const bookingCollection = client
@@ -141,14 +140,13 @@ async function run() {
     //
     app.get("/bookLists", async (req, res) => {
       const email = req.query.email;
-      console.log(email);
       if (!email) {
         return res.status(400).json({ message: "Email is required" });
       }
 
       try {
         const cursor = bookingCollection.find({ userEmail: email });
-        console.log(cursor);
+
         const result = await cursor.toArray();
 
         res.send(result);
@@ -160,13 +158,13 @@ async function run() {
     //
     app.delete("/bookList/:id", async (req, res) => {
       const id = req.params.id;
-      console.log(id);
+
       const query = { _id: new ObjectId(id) };
       const result = await bookingCollection.deleteOne(query);
       res.send(result);
     });
     //
-    await client.db("admin").command({ ping: 1 });
+
     console.log(
       "Pinged your deployment. You successfully connected to MongoDB!"
     );
