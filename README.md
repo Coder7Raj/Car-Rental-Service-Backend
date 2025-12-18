@@ -14,8 +14,7 @@ The **MotorVista** server-side application powers the car rental platform by han
 - **User Authentication**: Secure user sign-up, login, and session management.
 - **Vehicle Management**: CRUD operations for vehicle listings (add, edit, delete, view).
 - **Booking System**: Users can view real-time vehicle availability and make bookings.
-- **Payment Integration**: Secure payment processing for car rentals.
 - **Email Notifications**: Automatic booking confirmation and payment receipt emails.
 
 ## 🌍 **Live URL (API Endpoint)**
-[**MotorVista - API Documentation**](https://car-rent-server-wine.vercel.app/)
+[**MotorVista - backend url**](https://car-rent-server-wine.vercel.app/)
