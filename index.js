@@ -21,7 +21,7 @@ const client = new MongoClient(uri, {
   },
 });
 
-async function run() {
+async function running() {
   try {
     const userCollection = client.db("CarUser").collection("users");
     const carCollection = client.db("AvailableCars").collection("AllCars");
@@ -171,14 +171,14 @@ async function run() {
   } finally {
   }
 }
-run().catch(console.dir);
+running().catch(console.dir);
 
 //
 
 app.get("/", (req, res) => {
-  res.send("Car rent server is running.");
+  res.send("Car rent server is runningning.");
 });
 
 app.listen(port, () => {
-  console.log(`Car rent server is running on port:${port}`);
+  console.log(`Car rent server is runningning on port:${port}`);
 });
